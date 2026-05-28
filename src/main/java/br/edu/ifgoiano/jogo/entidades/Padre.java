@@ -5,14 +5,6 @@ import java.util.Date;
 public class Padre extends Usuario{
     private Date data_Ordenacao;
 
-    public Double getSalario() {
-        return salario;
-    }
-
-    public void setSalario(Double salario) {
-        this.salario = salario;
-    }
-
     public Date getData_Ordenacao() {
         return data_Ordenacao;
     }
