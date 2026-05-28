@@ -5,10 +5,17 @@ import br.edu.ifgoiano.jogo.entidades.Fiel;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Serviço responsável pelas operações de CRUD de {@link Fiel}. */
 public class FielServico {
+
     private List<Fiel> fieis =  new ArrayList<>();
     private Long proximoId = 1L;
 
+    /**
+     * Cadastra um novo fiel, validando nome, email e duplicatas.
+     * @param fiel fiel a cadastrar
+     * @return fiel com ID gerado
+     */
     public Fiel cadastrar(Fiel fiel){
         if (fiel.getNome() == null || fiel.getNome().isBlank()){
             throw new IllegalArgumentException("Nome não pode ser vazio!!");
@@ -24,6 +31,11 @@ public class FielServico {
         return fiel;
     }
 
+    /**
+     * Busca um fiel pelo ID.
+     * @param id identificador do fiel
+     * @return fiel encontrado ou {@code null}
+     */
     public Fiel buscarPorId(Long id){
         for (Fiel fiel : fieis){
             if (fiel.getId().equals(id)){
@@ -33,10 +45,16 @@ public class FielServico {
         return null;
     }
 
+    /** @return cópia da lista de todos os fiéis */
     public List<Fiel> listarTodos(){
         return new ArrayList<>(fieis);
     }
 
+    /**
+     * Atualiza os dados de um fiel existente.
+     * @param fiel fiel com dados atualizados (deve conter ID válido)
+     * @return fiel atualizado
+     */
     public Fiel atualizar(Fiel fiel){
         Fiel existente = buscarPorId(fiel.getId());
         if (existente == null){throw new IllegalArgumentException("Fiel não encontrado.");}
@@ -48,6 +66,11 @@ public class FielServico {
         return existente;
     }
 
+    /**
+     * Remove um fiel pelo ID.
+     * @param id identificador do fiel
+     * @return {@code true} se removido, {@code false} se não encontrado
+     */
     public boolean remover(Long id){
         return fieis.removeIf(f -> f.getId().equals(id));
     }

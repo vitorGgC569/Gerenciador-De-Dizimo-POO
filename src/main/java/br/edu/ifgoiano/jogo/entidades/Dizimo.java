@@ -2,7 +2,12 @@ package br.edu.ifgoiano.jogo.entidades;
 
 import java.util.Date;
 
+/**
+ * Classe centralizada para as ofertas dos fieis
+ */
 public class Dizimo{
+
+    // Variaveis de Instância.
 
     private String descricaoDizimo;
     private Double valor;
