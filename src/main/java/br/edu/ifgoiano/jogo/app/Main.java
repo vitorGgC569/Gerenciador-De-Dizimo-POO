@@ -6,5 +6,6 @@ void main() {
 
     while (true) {
         menuInicial.UiMenuInicial();
+        break;
     }
 }

@@ -15,6 +15,7 @@ public class MenuDoacao {
                 JOptionPane.showMessageDialog(null, "ERRO: É necessário inserir um valor numérico!");
                 continue;
             }
+            Double valorDouble = Double.parseDouble(valor);
             String tipo = JOptionPane.showInputDialog(null, """
                     Insira o tipo de doação (Descrição):
                     (0 - Voltar)
