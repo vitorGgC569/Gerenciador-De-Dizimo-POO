@@ -18,7 +18,7 @@ public class MenuDeletarUsuario {
             int idUsuario = Integer.parseInt(id);
 
             //faz busca e verifica se existe
-            boolean usuarioValido;
+            boolean usuarioValido = false;
             // = //verifica no banco se usuário o usuario
 
             if (usuarioValido) {

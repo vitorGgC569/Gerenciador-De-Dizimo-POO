@@ -1,7 +1,7 @@
 package br.edu.ifgoiano.gerenciadorDeDizimo.UI;
 
-import br.edu.ifgoiano.jogo.entidades.Doacao;
-import br.edu.ifgoiano.jogo.servicos.DoacaoServico;
+import br.edu.ifgoiano.gerenciadorDeDizimo.entidades.*;
+import br.edu.ifgoiano.gerenciadorDeDizimo.servicos.*;
 
 import javax.swing.*;
 
@@ -28,11 +28,12 @@ public class MenuDoacao {
                     """);
             if (tipo.equals("0")) break;
 
+
             //***registra a doação no banco de dados
             Doacao doacao = new Doacao();
             doacao.setValor(valorDouble);
             doacao.setTipo(tipo);
-            doacao.setIdFiel();
+            doacao.setIdFiel(0L);
             doacao.setIdParoquia(0L);
             DoacaoServico doacaoServico = new DoacaoServico();
             doacaoServico.registrar(doacao);

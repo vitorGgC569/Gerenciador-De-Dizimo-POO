@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.gerenciadorDeDizimo.UI;
 
+import br.edu.ifgoiano.gerenciadorDeDizimo.entidades.Fiel;
+
 import javax.swing.*;
 
 public class MenuFiel {
@@ -9,7 +11,7 @@ public class MenuFiel {
     /**
      * Inicia a Interface do Menu Fiel
      */
-    public void UIMenuFiel() {
+    public void UIMenuFiel(Fiel fiel) {
         loopUI:
         while (true) {
             String op = JOptionPane.showInputDialog(null, """

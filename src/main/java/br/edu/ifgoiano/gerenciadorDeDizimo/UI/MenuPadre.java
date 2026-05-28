@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.gerenciadorDeDizimo.UI;
 
+import br.edu.ifgoiano.gerenciadorDeDizimo.entidades.Padre;
+
 import javax.swing.*;
 
 public class MenuPadre {
@@ -7,7 +9,7 @@ public class MenuPadre {
     /**
      * Inicia a Interface do Menu Padre
      */
-    public void UIMenuPadre() {
+    public void UIMenuPadre(Padre padre) {
         loopUI:
         while (true) {
             String op = JOptionPane.showInputDialog(null, """

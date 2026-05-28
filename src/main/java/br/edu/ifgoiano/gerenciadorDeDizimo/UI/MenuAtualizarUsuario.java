@@ -20,7 +20,7 @@ public class MenuAtualizarUsuario {
             int idUsuario = Integer.parseInt(id);
 
             //faz busca e verifica se existe
-            boolean usuarioValido;
+            boolean usuarioValido = true;
             // = //verifica no banco se usuário o usuario
 
             if (usuarioValido) {

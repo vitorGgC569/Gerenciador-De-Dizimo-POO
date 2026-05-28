@@ -62,7 +62,7 @@ class DoacaoServicoTest {
     @Order(1)
     @DisplayName("Deve registrar doação e gerar ID")
     void deveRegistrarDoacao() throws SQLException {
-        Doacao doacao = criarDoacao(50.0, "Dízimo", "Nossa Senhora");
+        Doacao doacao = criarDoacao(50.0, "Dízimo", 0L);
 
         Doacao registrada = servico.registrar(doacao);
 
@@ -74,8 +74,8 @@ class DoacaoServicoTest {
     @Order(2)
     @DisplayName("Deve listar doações por fiel")
     void deveListarDoacoesPorFiel() throws SQLException {
-        servico.registrar(criarDoacao(50.0, "Dízimo", "Nossa Senhora"));
-        servico.registrar(criarDoacao(30.0, "Oferta", "Nossa Senhora"));
+        servico.registrar(criarDoacao(50.0, "Dízimo", 0L));
+        servico.registrar(criarDoacao(30.0, "Oferta", 0L));
 
         List<Doacao> lista = servico.listarPorFiel(ID_FIEL_TESTE);
 
@@ -95,7 +95,7 @@ class DoacaoServicoTest {
     @Order(4)
     @DisplayName("Deve remover doação existente")
     void deveRemoverDoacao() throws SQLException {
-        Doacao registrada = servico.registrar(criarDoacao(50.0, "Dízimo", "Nossa Senhora"));
+        Doacao registrada = servico.registrar(criarDoacao(50.0, "Dízimo", 0L));
 
         boolean removida = servico.remover(registrada.getId());
 
@@ -114,8 +114,8 @@ class DoacaoServicoTest {
     @Order(6)
     @DisplayName("Deve calcular total das doações do fiel")
     void deveCalcularTotalPorFiel() throws SQLException {
-        servico.registrar(criarDoacao(100.0, "Dízimo", "Nossa Senhora"));
-        servico.registrar(criarDoacao(50.0, "Oferta", "Nossa Senhora"));
+        servico.registrar(criarDoacao(100.0, "Dízimo", 0L));
+        servico.registrar(criarDoacao(50.0, "Oferta", 0L));
 
         double total = servico.calcularTotalPorFiel(ID_FIEL_TESTE);
 
@@ -131,12 +131,12 @@ class DoacaoServicoTest {
         assertEquals(0.0, total);
     }
 
-    private Doacao criarDoacao(double valor, String tipo, String nomeParoquia) {
+    private Doacao criarDoacao(double valor, String tipo, long idParoquia) {
         Doacao d = new Doacao();
         d.setIdFiel(ID_FIEL_TESTE);
         d.setValor(valor);
         d.setTipo(tipo);
-        d.setNomeParoquia(nomeParoquia);
+        d.setId(idParoquia);
         return d;
     }
 }
