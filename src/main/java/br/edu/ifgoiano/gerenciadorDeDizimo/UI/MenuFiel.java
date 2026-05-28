@@ -16,7 +16,7 @@ public class MenuFiel {
         while (true) {
             String op = JOptionPane.showInputDialog(null, """
                     ===================================================
-                    MENU FIEL
+                                        MENU FIEL
                     ===================================================
                     [1]: Realizar Doação
                     [2]: Ver todas as doações feitas pelo fiel

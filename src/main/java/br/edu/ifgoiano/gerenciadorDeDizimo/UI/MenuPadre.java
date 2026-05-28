@@ -14,7 +14,7 @@ public class MenuPadre {
         while (true) {
             String op = JOptionPane.showInputDialog(null, """
                     ===================================================
-                    MENU PADRE
+                                         MENU PADRE
                     ===================================================
                     [1]: Ver todas as doações
                     [2]: Voltar

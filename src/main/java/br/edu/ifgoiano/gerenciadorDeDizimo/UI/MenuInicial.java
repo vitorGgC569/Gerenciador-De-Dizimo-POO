@@ -16,7 +16,7 @@ public class MenuInicial {
     public void UiMenuInicial(){
         String op = JOptionPane.showInputDialog("""
                 ===================================================
-                MENU INICIAL
+                                    MENU INICIAL
                 ===================================================
                 [1]: Fazer Login
                 [2]: Cadastrar Usuário
