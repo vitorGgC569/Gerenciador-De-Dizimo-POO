@@ -1,103 +1,246 @@
 package br.edu.ifgoiano.gerenciadorDeDizimo.servicos;
 
+import br.edu.ifgoiano.gerenciadorDeDizimo.db.ConexaoDB;
 import br.edu.ifgoiano.gerenciadorDeDizimo.entidades.Padre;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /** Serviço responsável pelas operações de CRUD de {@link Padre}. */
 public class PadreServico {
 
-    private List<Padre> padres = new ArrayList<>();
-    private Long proximoId = 1L;
-
     /**
-     * Cadastra um novo padre, validando nome, email e duplicatas.
+     * Cadastra um novo padre.
      * @param padre padre a cadastrar
-     * @return padre com ID gerado
+     * @return padre com ID preenchido
      */
     public Padre cadastrar(Padre padre){
 
         if (padre.getNome() == null || padre.getNome().isBlank()){
-            throw new IllegalArgumentException("Nome não pode ser vazio!!");
+            throw new IllegalArgumentException(
+                    "Nome não pode ser vazio."
+            );
         }
 
         if (padre.getEmail() == null || padre.getEmail().isBlank()){
-            throw new IllegalArgumentException("Email não pode ser vazio!!");
+            throw new IllegalArgumentException(
+                    "Email não pode ser vazio."
+            );
         }
 
-        if (emailJaCadastrado(padre.getEmail())){
-            throw new IllegalArgumentException("Email já cadastrado.");
+        String sql =
+                "INSERT INTO usuario " +
+                        "(tipo, nome, email, senha_hash, is_admin, data_ordenacao) " +
+                        "VALUES ('PADRE', ?, ?, ?, ?, ?)";
+
+        try (
+                Connection con = ConexaoDB.getConexao();
+                PreparedStatement stmt =
+                        con.prepareStatement(
+                                sql,
+                                Statement.RETURN_GENERATED_KEYS
+                        )
+        ) {
+
+            stmt.setString(1, padre.getNome());
+            stmt.setString(2, padre.getEmail());
+            stmt.setString(3, padre.getSenhaHash());
+
+            stmt.setInt(
+                    4,
+                    padre.isAdmin() ? 1 : 0
+            );
+
+            stmt.setString(
+                    5,
+                    padre.getData_Ordenacao() != null
+                            ? padre.getData_Ordenacao().toString()
+                            : null
+            );
+
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+
+            if (rs.next()){
+                padre.setId(rs.getLong(1));
+            }
+
+            return padre;
+
+        } catch (SQLException e){
+
+            throw new RuntimeException(
+                    "Erro ao cadastrar padre: " +
+                            e.getMessage()
+            );
         }
-
-        padre.setId(proximoId++);
-        padres.add(padre);
-
-        return padre;
     }
 
     /**
-     * Busca um padre pelo ID.
-     * @param id identificador do padre
-     * @return padre encontrado ou {@code null}
+     * Busca padre por ID.
      */
     public Padre buscarPorId(Long id){
 
-        for (Padre padre : padres){
+        String sql =
+                "SELECT * FROM usuario " +
+                        "WHERE id = ? AND tipo = 'PADRE'";
 
-            if (padre.getId().equals(id)){
-                return padre;
+        try (
+                Connection con = ConexaoDB.getConexao();
+                PreparedStatement stmt =
+                        con.prepareStatement(sql)
+        ) {
+
+            stmt.setLong(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+                return mapear(rs);
             }
+
+        } catch (SQLException e){
+
+            throw new RuntimeException(
+                    "Erro ao buscar padre: " +
+                            e.getMessage()
+            );
         }
 
         return null;
     }
 
-    /** @return cópia da lista de todos os padres */
+    /**
+     * Lista todos os padres.
+     */
     public List<Padre> listarTodos(){
-        return new ArrayList<>(padres);
+
+        String sql =
+                "SELECT * FROM usuario " +
+                        "WHERE tipo = 'PADRE'";
+
+        List<Padre> lista = new ArrayList<>();
+
+        try (
+                Connection con = ConexaoDB.getConexao();
+                PreparedStatement stmt =
+                        con.prepareStatement(sql)
+        ) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                lista.add(mapear(rs));
+            }
+
+        } catch (SQLException e){
+
+            throw new RuntimeException(
+                    "Erro ao listar padres: " +
+                            e.getMessage()
+            );
+        }
+
+        return lista;
     }
 
     /**
-     * Atualiza os dados de um padre existente.
-     * @param padre padre com dados atualizados
-     * @return padre atualizado
+     * Atualiza os dados do padre.
      */
     public Padre atualizar(Padre padre){
 
-        Padre existente = buscarPorId(padre.getId());
+        String sql =
+                "UPDATE usuario SET " +
+                        "nome = ?, " +
+                        "email = ?, " +
+                        "senha_hash = ?, " +
+                        "is_admin = ?, " +
+                        "data_ordenacao = ? " +
+                        "WHERE id = ? AND tipo = 'PADRE'";
 
-        if (existente == null){
-            throw new IllegalArgumentException("Padre não encontrado.");
+        try (
+                Connection con = ConexaoDB.getConexao();
+                PreparedStatement stmt =
+                        con.prepareStatement(sql)
+        ) {
+
+            stmt.setString(1, padre.getNome());
+            stmt.setString(2, padre.getEmail());
+            stmt.setString(3, padre.getSenhaHash());
+
+            stmt.setInt(
+                    4,
+                    padre.isAdmin() ? 1 : 0
+            );
+
+            stmt.setString(
+                    5,
+                    padre.getData_Ordenacao() != null
+                            ? padre.getData_Ordenacao().toString()
+                            : null
+            );
+
+            stmt.setLong(6, padre.getId());
+
+            stmt.executeUpdate();
+
+            return padre;
+
+        } catch (SQLException e){
+
+            throw new RuntimeException(
+                    "Erro ao atualizar padre: " +
+                            e.getMessage()
+            );
         }
-
-        existente.setNome(padre.getNome());
-        existente.setEmail(padre.getEmail());
-        existente.setSenhaHash(padre.getSenhaHash());
-        existente.setData_Ordenacao(padre.getData_Ordenacao());
-        existente.setAdmin(padre.isAdmin());
-
-        return existente;
     }
 
     /**
-     * Remove um padre pelo ID.
-     * @param id identificador do padre
-     * @return {@code true} se removido
+     * Remove padre pelo ID.
      */
     public boolean remover(Long id){
-        return padres.removeIf(p -> p.getId().equals(id));
+
+        String sql =
+                "DELETE FROM usuario " +
+                        "WHERE id = ? AND tipo = 'PADRE'";
+
+        try (
+                Connection con = ConexaoDB.getConexao();
+                PreparedStatement stmt =
+                        con.prepareStatement(sql)
+        ) {
+
+            stmt.setLong(1, id);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e){
+
+            throw new RuntimeException(
+                    "Erro ao remover padre: " +
+                            e.getMessage()
+            );
+        }
     }
 
-    private boolean emailJaCadastrado(String email){
+    /**
+     * Converte ResultSet em objeto Padre.
+     */
+    private Padre mapear(ResultSet rs) throws SQLException {
 
-        for (Padre padre : padres){
+        Padre padre = new Padre();
 
-            if (padre.getEmail().equalsIgnoreCase(email)){
-                return true;
-            }
-        }
+        padre.setId(rs.getLong("id"));
+        padre.setNome(rs.getString("nome"));
+        padre.setEmail(rs.getString("email"));
+        padre.setSenhaHash(rs.getString("senha_hash"));
 
-        return false;
+        padre.setAdmin(
+                rs.getInt("is_admin") == 1
+        );
+
+        return padre;
     }
 }
