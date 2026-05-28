@@ -65,7 +65,8 @@ public class ConexaoDB {
                     nome TEXT NOT NULL,
                     email TEXT NOT NULL UNIQUE,
                     senha_hash TEXT NOT NULL,
-                    is_admin INTEGER NOT NULL DEFAULT 0
+                    is_admin INTEGER NOT NULL DEFAULT 0,
+                    telefone TEXT
                 )
             """);
 

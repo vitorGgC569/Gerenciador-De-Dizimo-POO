@@ -2,8 +2,16 @@ package br.edu.ifgoiano.jogo.entidades;
 
 import java.util.ArrayList;
 
-/** Representa uma paróquia, contendo seus fiéis e o padre responsável. */
+/**
+ * Representa uma paróquia cadastrada no sistema.
+ *
+ * A classe armazena o nome, endereço, padre responsável
+ * e a lista de fiéis vinculados à paróquia.
+ */
 public class Paroquia {
+
+    /** Identificador único da paróquia no banco de dados. */
+    private Long id;
 
     /** Nome da paróquia. */
     private String nomeParoquia;
@@ -20,6 +28,15 @@ public class Paroquia {
     /** Padre responsável pela paróquia. */
     private Padre padre;
 
+    /**
+     * Construtor completo da classe Paroquia.
+     *
+     * @param nomeParoquia nome da paróquia
+     * @param endereco endereço da paróquia
+     * @param fies lista de fiéis
+     * @param qtdeFieis quantidade de fiéis
+     * @param padre padre responsável
+     */
     public Paroquia(String nomeParoquia, String endereco, ArrayList<Fiel> fies, int qtdeFieis, Padre padre) {
         this.nomeParoquia = nomeParoquia;
         this.endereco = endereco;
@@ -28,64 +45,135 @@ public class Paroquia {
         this.padre = padre;
     }
 
+    /**
+     * Construtor vazio da classe Paroquia.
+     */
     public Paroquia() {
-    }
-
-    public Padre getPadre() {
-        return padre;
-    }
-
-    public void setPadre(Padre padre) {
-        this.padre = padre;
+        this.fies = new ArrayList<>();
+        this.qtdeFieis = 0;
     }
 
     /**
+     * Construtor básico da classe Paroquia.
+     *
      * @param nomeParoquia nome da paróquia
      * @param endereco endereço da paróquia
      * @param padre padre responsável
      */
-    public Paroquia(String nomeParoquia, String endereco, Padre padre){
+    public Paroquia(String nomeParoquia, String endereco, Padre padre) {
+        this.nomeParoquia = nomeParoquia;
+        this.endereco = endereco;
+        this.padre = padre;
         this.fies = new ArrayList<>();
-        this.qtdeFieis = fies.size();
+        this.qtdeFieis = this.fies.size();
     }
 
-    /** @return nome da paróquia */
+    /**
+     * Retorna o identificador da paróquia.
+     *
+     * @return id da paróquia
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Define o identificador da paróquia.
+     *
+     * @param id id da paróquia
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Retorna o nome da paróquia.
+     *
+     * @return nome da paróquia
+     */
     public String getNomeParoquia() {
         return nomeParoquia;
     }
 
-    /** @param nomeParoquia nome a definir */
+    /**
+     * Define o nome da paróquia.
+     *
+     * @param nomeParoquia nome da paróquia
+     */
     public void setNomeParoquia(String nomeParoquia) {
         this.nomeParoquia = nomeParoquia;
     }
 
-    /** @return endereço da paróquia */
+    /**
+     * Retorna o endereço da paróquia.
+     *
+     * @return endereço da paróquia
+     */
     public String getEndereco() {
         return endereco;
     }
 
-    /** @param endereco endereço a definir */
+    /**
+     * Define o endereço da paróquia.
+     *
+     * @param endereco endereço da paróquia
+     */
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
 
-    /** @return quantidade de fiéis cadastrados */
+    /**
+     * Retorna a quantidade de fiéis.
+     *
+     * @return quantidade de fiéis
+     */
     public int getQtdeFieis() {
         return qtdeFieis;
     }
 
-    /** @param qtdeFieis quantidade a definir */
+    /**
+     * Define a quantidade de fiéis.
+     *
+     * @param qtdeFieis quantidade de fiéis
+     */
     public void setQtdeFieis(int qtdeFieis) {
         this.qtdeFieis = qtdeFieis;
     }
 
-    /** @return lista de fiéis da paróquia */
+    /**
+     * Retorna a lista de fiéis da paróquia.
+     *
+     * @return lista de fiéis
+     */
     public ArrayList<Fiel> getFies() {
         return fies;
     }
 
-    /** @param fies lista de fiéis a definir */
+    /**
+     * Define a lista de fiéis da paróquia.
+     *
+     * @param fies lista de fiéis
+     */
     public void setFies(ArrayList<Fiel> fies) {
         this.fies = fies;
+        this.qtdeFieis = fies != null ? fies.size() : 0;
+    }
+
+    /**
+     * Retorna o padre responsável pela paróquia.
+     *
+     * @return padre responsável
+     */
+    public Padre getPadre() {
+        return padre;
+    }
+
+    /**
+     * Define o padre responsável pela paróquia.
+     *
+     * @param padre padre responsável
+     */
+    public void setPadre(Padre padre) {
+        this.padre = padre;
     }
 }
