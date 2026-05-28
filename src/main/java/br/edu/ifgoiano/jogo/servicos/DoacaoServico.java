@@ -15,7 +15,7 @@ public class DoacaoServico {
      * @return doação com ID preenchido
      */
     public Doacao registrar(Doacao doacao) throws SQLException {
-        String sql = "INSERT INTO doacao (field_id, valor, tipo, nome_paroquia) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO doacao (fiel_id, valor, tipo, nome_paroquia) VALUES (?,?,?,?)";
         try(Connection con = ConexaoDB.getConexao(); PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
 
