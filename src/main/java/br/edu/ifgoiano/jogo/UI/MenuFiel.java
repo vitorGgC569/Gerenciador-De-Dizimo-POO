@@ -6,6 +6,9 @@ public class MenuFiel {
 
     MenuDoacao menuDoacao = new MenuDoacao();
 
+    /**
+     * Inicia a Interface do Menu Fiel
+     */
     public void UIMenuFiel() {
         loopUI:
         while (true) {

@@ -6,6 +6,9 @@ public class MenuAtualizarUsuario {
 
     MenuCadastrarUsuario menuCadastrarUsuario = new MenuCadastrarUsuario();
 
+    /**
+     * Inicia a Interface do Menu Atualizar Usuário
+     */
     public void UIMenuAtualizarUsuario() {
 
         while (true) {

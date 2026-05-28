@@ -10,6 +10,9 @@ public class MenuInicial {
     MenuAtualizarUsuario menuAtualizarUsuario = new MenuAtualizarUsuario();
     MenuDeletarUsuario menuDeletarUsuario = new MenuDeletarUsuario();
 
+    /**
+     * Inicia a Interface do Menu Inicial
+     */
     public void UiMenuInicial(){
         String op = JOptionPane.showInputDialog("""
                 ===================================================

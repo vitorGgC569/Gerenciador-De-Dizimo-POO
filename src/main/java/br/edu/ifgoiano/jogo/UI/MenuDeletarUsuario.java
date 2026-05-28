@@ -4,6 +4,9 @@ import javax.swing.*;
 
 public class MenuDeletarUsuario {
 
+    /**
+     * Inicia a Interface do Menu Deletar Usuário
+     */
     public void UIMenuDeletarUsuario() {
 
         while (true) {

@@ -1,9 +1,15 @@
 package br.edu.ifgoiano.jogo.UI;
 
+import br.edu.ifgoiano.jogo.entidades.Doacao;
+import br.edu.ifgoiano.jogo.servicos.DoacaoServico;
+
 import javax.swing.*;
 
 public class MenuDoacao {
 
+    /**
+     * Inicia a Interface do Menu Doação
+     */
     public void UIMenuDoacao() {
         while (true) {
             String valor = JOptionPane.showInputDialog(null, """
@@ -23,6 +29,13 @@ public class MenuDoacao {
             if (tipo.equals("0")) break;
 
             //***registra a doação no banco de dados
+            Doacao doacao = new Doacao();
+            doacao.setValor(valorDouble);
+            doacao.setTipo(tipo);
+            doacao.setIdFiel();
+            doacao.setIdParoquia(0L);
+            DoacaoServico doacaoServico = new DoacaoServico();
+            doacaoServico.registrar(doacao);
 
             break; //finaliza e volta para o menu do fiel
         }

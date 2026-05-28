@@ -4,6 +4,9 @@ import javax.swing.*;
 
 public class MenuPadre {
 
+    /**
+     * Inicia a Interface do Menu Padre
+     */
     public void UIMenuPadre() {
         loopUI:
         while (true) {

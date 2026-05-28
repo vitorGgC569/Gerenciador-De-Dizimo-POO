@@ -4,6 +4,9 @@ import javax.swing.*;
 
 public class MenuBuscarUsuario {
 
+    /**
+     * Inicia a Interface do Menu Busca Usuário
+     */
     public void UIMenuBuscarUsuario() {
 
         while (true) {
