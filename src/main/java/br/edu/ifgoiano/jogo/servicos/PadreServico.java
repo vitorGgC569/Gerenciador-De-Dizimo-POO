@@ -17,17 +17,22 @@ public class PadreServico {
      * @return padre com ID gerado
      */
     public Padre cadastrar(Padre padre){
+
         if (padre.getNome() == null || padre.getNome().isBlank()){
             throw new IllegalArgumentException("Nome não pode ser vazio!!");
         }
+
         if (padre.getEmail() == null || padre.getEmail().isBlank()){
             throw new IllegalArgumentException("Email não pode ser vazio!!");
         }
+
         if (emailJaCadastrado(padre.getEmail())){
             throw new IllegalArgumentException("Email já cadastrado.");
         }
+
         padre.setId(proximoId++);
         padres.add(padre);
+
         return padre;
     }
 
@@ -37,10 +42,14 @@ public class PadreServico {
      * @return padre encontrado ou {@code null}
      */
     public Padre buscarPorId(Long id){
+
         for (Padre padre : padres){
-            if (padre.getId().equals(id))
+
+            if (padre.getId().equals(id)){
                 return padre;
+            }
         }
+
         return null;
     }
 
@@ -51,34 +60,44 @@ public class PadreServico {
 
     /**
      * Atualiza os dados de um padre existente.
-     * @param padre padre com dados atualizados (deve conter ID válido)
+     * @param padre padre com dados atualizados
      * @return padre atualizado
      */
     public Padre atualizar(Padre padre){
+
         Padre existente = buscarPorId(padre.getId());
-        if (existente == null){throw new IllegalArgumentException("Padre não encontrado.");}
+
+        if (existente == null){
+            throw new IllegalArgumentException("Padre não encontrado.");
+        }
+
         existente.setNome(padre.getNome());
         existente.setEmail(padre.getEmail());
         existente.setSenhaHash(padre.getSenhaHash());
         existente.setData_Ordenacao(padre.getData_Ordenacao());
+        existente.setAdmin(padre.isAdmin());
+
         return existente;
     }
 
     /**
      * Remove um padre pelo ID.
      * @param id identificador do padre
-     * @return {@code true} se removido, {@code false} se não encontrado
+     * @return {@code true} se removido
      */
     public boolean remover(Long id){
         return padres.removeIf(p -> p.getId().equals(id));
     }
 
-
     private boolean emailJaCadastrado(String email){
+
         for (Padre padre : padres){
-            if (padre.getEmail().equalsIgnoreCase(email)) return true;
+
+            if (padre.getEmail().equalsIgnoreCase(email)){
+                return true;
+            }
         }
+
         return false;
     }
-
 }
