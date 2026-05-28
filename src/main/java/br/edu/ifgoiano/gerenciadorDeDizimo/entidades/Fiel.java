@@ -31,6 +31,9 @@ public class Fiel extends Usuario {
     public Fiel() {
     }
 
+    public Fiel(java.sql.Date data, long l, String vitor, String mail, String number, boolean admin, String number1) {
+    }
+
     /**
      * Retorna a data de batismo do fiel.
      *

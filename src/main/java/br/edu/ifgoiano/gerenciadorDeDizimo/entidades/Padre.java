@@ -1,6 +1,5 @@
 package br.edu.ifgoiano.gerenciadorDeDizimo.entidades;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -29,6 +28,9 @@ public class Padre extends Usuario {
     public Padre() {
     }
 
+    public Padre(java.sql.Date data, long l, String nome, String email, String senha, boolean admin, String telefone) {
+    }
+
     /**
      * Retorna a data de ordenação do padre.
      *
@@ -43,7 +45,7 @@ public class Padre extends Usuario {
      *
      * @param data_Ordenacao data de ordenação
      */
-    public void setData_Ordenacao(LocalDate data_Ordenacao) {
+    public void setData_Ordenacao(Date data_Ordenacao) {
         this.data_Ordenacao = data_Ordenacao;
     }
 }
