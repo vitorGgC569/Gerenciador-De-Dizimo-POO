@@ -1,4 +1,4 @@
-public class Fiel {
+public class Fiel extends Usuario{
     private Date dataBatismo;
     private boolean isAdmin;
 
