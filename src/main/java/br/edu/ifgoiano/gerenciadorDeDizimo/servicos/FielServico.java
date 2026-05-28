@@ -11,7 +11,7 @@ import java.util.List;
 public class FielServico {
 
     /**
-     * Cadastra um novo fiel na tabela usuario e atribui o ID gerado.
+     * Cadastra um novo fiel inserindo em {@code usuario} e em {@code fiel}.
      * @param fiel fiel a cadastrar
      * @return fiel com ID preenchido
      */
@@ -22,40 +22,68 @@ public class FielServico {
         if (fiel.getEmail() == null || fiel.getEmail().isBlank()){
             throw new IllegalArgumentException("Email não pode ser vazio!!");
         }
-        String sql = "INSERT INTO usuario (tipo, nome, email, senha_hash, is_admin, data_batismo) VALUES ('FIEL', ?, ?, ?, ?, ?)";
-        try (Connection con = ConexaoDB.getConexao();
-             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, fiel.getNome());
-            stmt.setString(2, fiel.getEmail());
-            stmt.setString(3, fiel.getSenhaHash());
-            stmt.setInt(4, fiel.isAdmin() ? 1 : 0);
-            stmt.setString(5, fiel.getDataBatismo() != null ? fiel.getDataBatismo().toString() : null);
-            stmt.executeUpdate();
+        String sqlUsuario = "INSERT INTO usuario (nome, email, senha_hash, is_admin, telefone) VALUES (?, ?, ?, ?, ?)";
+        String sqlFiel    = "INSERT INTO fiel (id_usuario, data_batismo, id_paroquia) VALUES (?, ?, ?)";
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) fiel.setId(rs.getLong(1));
+        Connection con = null;
+        try {
+            con = ConexaoDB.getConexao();
+            con.setAutoCommit(false);
 
+            long idGerado;
+            try (PreparedStatement stmtU = con.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS)) {
+                stmtU.setString(1, fiel.getNome());
+                stmtU.setString(2, fiel.getEmail());
+                stmtU.setString(3, fiel.getSenhaHash());
+                stmtU.setInt(4, fiel.isAdmin() ? 1 : 0);
+                stmtU.setString(5, fiel.getTelefone());
+                stmtU.executeUpdate();
+
+                ResultSet rs = stmtU.getGeneratedKeys();
+                if (!rs.next()) throw new RuntimeException("ID não gerado para o fiel.");
+                idGerado = rs.getLong(1);
+            }
+
+            try (PreparedStatement stmtF = con.prepareStatement(sqlFiel)) {
+                stmtF.setLong(1, idGerado);
+                stmtF.setString(2, fiel.getDataBatismo() != null ? fiel.getDataBatismo().toString() : null);
+                stmtF.setObject(3, fiel.getIdParoquia());
+                stmtF.executeUpdate();
+            }
+
+            con.commit();
+            fiel.setId(idGerado);
             return fiel;
+
         } catch (SQLException e) {
+            if (con != null) try { con.rollback(); } catch (SQLException ignored) {}
             throw new RuntimeException("Não foi possível cadastrar o Fiel: " + e.getMessage());
+        } finally {
+            if (con != null) try { con.setAutoCommit(true); } catch (SQLException ignored) {}
         }
     }
 
     /**
-     * Busca um fiel pelo ID.
+     * Busca um fiel pelo ID com JOIN entre {@code usuario} e {@code fiel}.
      * @param id identificador do fiel
      * @return fiel encontrado ou {@code null}
      */
     public Fiel buscarPorId(Long id) {
-        String sql = "SELECT * FROM usuario WHERE id = ? AND tipo = 'FIEL'";
+        String sql = """
+            SELECT u.id, u.nome, u.email, u.senha_hash, u.is_admin, u.telefone,
+                   f.data_batismo, f.id_paroquia
+            FROM usuario u
+            INNER JOIN fiel f ON u.id = f.id_usuario
+            WHERE u.id = ?
+        """;
         try (Connection con = ConexaoDB.getConexao();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return mapear(rs);
-            }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return mapear(rs);
+
         } catch (SQLException e) {
             throw new RuntimeException("Não foi possível encontrar o Fiel com esse ID: " + e.getMessage());
         }
@@ -64,7 +92,12 @@ public class FielServico {
 
     /** @return lista com todos os fiéis cadastrados */
     public List<Fiel> listarTodos() {
-        String sql = "SELECT * FROM usuario WHERE tipo = 'FIEL'";
+        String sql = """
+            SELECT u.id, u.nome, u.email, u.senha_hash, u.is_admin, u.telefone,
+                   f.data_batismo, f.id_paroquia
+            FROM usuario u
+            INNER JOIN fiel f ON u.id = f.id_usuario
+        """;
         List<Fiel> lista = new ArrayList<>();
         try (Connection con = ConexaoDB.getConexao();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -79,36 +112,54 @@ public class FielServico {
     }
 
     /**
-     * Atualiza os dados de um fiel existente.
+     * Atualiza os dados do fiel nas tabelas {@code usuario} e {@code fiel}.
      * @param fiel fiel com dados atualizados (deve conter ID válido)
      * @return fiel atualizado
      */
     public Fiel atualizar(Fiel fiel) {
-        String sql = "UPDATE usuario SET nome = ?, email = ?, senha_hash = ?, is_admin = ?, data_batismo = ? WHERE id = ? AND tipo = 'FIEL'";
-        try (Connection con = ConexaoDB.getConexao();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        String sqlUsuario = "UPDATE usuario SET nome = ?, email = ?, senha_hash = ?, is_admin = ?, telefone = ? WHERE id = ?";
+        String sqlFiel    = "UPDATE fiel SET data_batismo = ?, id_paroquia = ? WHERE id_usuario = ?";
 
-            stmt.setString(1, fiel.getNome());
-            stmt.setString(2, fiel.getEmail());
-            stmt.setString(3, fiel.getSenhaHash());
-            stmt.setInt(4, fiel.isAdmin() ? 1 : 0);
-            stmt.setString(5, fiel.getDataBatismo() != null ? fiel.getDataBatismo().toString() : null);
-            stmt.setLong(6, fiel.getId());
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConexaoDB.getConexao();
+            con.setAutoCommit(false);
 
+            try (PreparedStatement stmtU = con.prepareStatement(sqlUsuario)) {
+                stmtU.setString(1, fiel.getNome());
+                stmtU.setString(2, fiel.getEmail());
+                stmtU.setString(3, fiel.getSenhaHash());
+                stmtU.setInt(4, fiel.isAdmin() ? 1 : 0);
+                stmtU.setString(5, fiel.getTelefone());
+                stmtU.setLong(6, fiel.getId());
+                stmtU.executeUpdate();
+            }
+
+            try (PreparedStatement stmtF = con.prepareStatement(sqlFiel)) {
+                stmtF.setString(1, fiel.getDataBatismo() != null ? fiel.getDataBatismo().toString() : null);
+                stmtF.setObject(2, fiel.getIdParoquia());
+                stmtF.setLong(3, fiel.getId());
+                stmtF.executeUpdate();
+            }
+
+            con.commit();
             return fiel;
+
         } catch (SQLException e) {
+            if (con != null) try { con.rollback(); } catch (SQLException ignored) {}
             throw new RuntimeException("Erro ao atualizar fiel: " + e.getMessage());
+        } finally {
+            if (con != null) try { con.setAutoCommit(true); } catch (SQLException ignored) {}
         }
     }
 
     /**
-     * Remove um fiel pelo ID.
+     * Remove um fiel pelo ID — o CASCADE cuida da tabela {@code fiel}.
      * @param id identificador do fiel
-     * @return {@code true} se removido, {@code false} se não encontrado
+     * @return {@code true} se removido
      */
     public boolean remover(Long id) {
-        String sql = "DELETE FROM usuario WHERE id = ? AND tipo = 'FIEL'";
+        String sql = "DELETE FROM usuario WHERE id = ?";
         try (Connection con = ConexaoDB.getConexao();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
@@ -127,6 +178,8 @@ public class FielServico {
         fiel.setEmail(rs.getString("email"));
         fiel.setSenhaHash(rs.getString("senha_hash"));
         fiel.setAdmin(rs.getInt("is_admin") == 1);
+        fiel.setTelefone(rs.getString("telefone"));
+        fiel.setIdParoquia(rs.getLong("id_paroquia"));
         return fiel;
     }
 }
