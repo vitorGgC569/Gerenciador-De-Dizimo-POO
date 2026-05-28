@@ -8,6 +8,13 @@ public class Fiel extends Usuario{
     /** Data em que o fiel recebeu o batismo. */
     private Date dataBatismo;
 
+    public Fiel(Date dataBatismo) {
+        this.dataBatismo = dataBatismo;
+    }
+
+    public Fiel() {
+    }
+
     /**
      * @return data de batismo do fiel
      */

@@ -20,6 +20,25 @@ public class Paroquia {
     /** Padre responsável pela paróquia. */
     private Padre padre;
 
+    public Paroquia(String nomeParoquia, String endereco, ArrayList<Fiel> fies, int qtdeFieis, Padre padre) {
+        this.nomeParoquia = nomeParoquia;
+        this.endereco = endereco;
+        this.fies = fies;
+        this.qtdeFieis = qtdeFieis;
+        this.padre = padre;
+    }
+
+    public Paroquia() {
+    }
+
+    public Padre getPadre() {
+        return padre;
+    }
+
+    public void setPadre(Padre padre) {
+        this.padre = padre;
+    }
+
     /**
      * @param nomeParoquia nome da paróquia
      * @param endereco endereço da paróquia

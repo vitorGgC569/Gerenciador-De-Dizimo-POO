@@ -8,6 +8,13 @@ public class Padre extends Usuario{
     /** Data em que o padre foi ordenado. */
     private Date data_Ordenacao;
 
+    public Padre(Date data_Ordenacao) {
+        this.data_Ordenacao = data_Ordenacao;
+    }
+
+    public Padre() {
+    }
+
     /**
      * @return data de ordenação do padre
      */

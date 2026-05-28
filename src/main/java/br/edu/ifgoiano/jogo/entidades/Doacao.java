@@ -8,11 +8,22 @@ import java.util.Date;
 public class Doacao{
 
     // Variaveis de Instância.
-
    private double valor;
    private String tipo;
    private String nomeParoquia;
    private long IdFiel;
+   private Long id;
+
+    public Doacao(double valor, String tipo, String nomeParoquia, long idFiel, Long id) {
+        this.valor = valor;
+        this.tipo = tipo;
+        this.nomeParoquia = nomeParoquia;
+        IdFiel = idFiel;
+        this.id = id;
+    }
+
+    public Doacao() {
+    }
 
     public double getValor() {
         return valor;
@@ -44,5 +55,13 @@ public class Doacao{
 
     public void setIdFiel(long idFiel) {
         IdFiel = idFiel;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

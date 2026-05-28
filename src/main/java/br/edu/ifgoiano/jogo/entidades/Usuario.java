@@ -14,6 +14,17 @@ public abstract class Usuario {
     private boolean isAdmin;
     private String telefone;
 
+    public Usuario(Long id, String nome, String email, String senhaHash, boolean isAdmin, String telefone) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senhaHash = senhaHash;
+        this.isAdmin = isAdmin;
+        this.telefone = telefone;
+    }
+
+    public Usuario() {
+    }
 
     public Long getId() {
         return id;
