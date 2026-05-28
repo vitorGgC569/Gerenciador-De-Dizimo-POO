@@ -44,52 +44,77 @@ public class ConexaoDB {
             // Ativa suporte a chaves estrangeiras no SQLite
             stmt.execute("PRAGMA foreign_keys = ON");
 
-            // Tabela base de usuários (estratégia table-per-class com type discriminator)
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS usuario (
-                    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-                    tipo       TEXT    NOT NULL CHECK(tipo IN ('FIEL','PADRE')),
-                    nome       TEXT    NOT NULL,
-                    email      TEXT    NOT NULL UNIQUE,
-                    senha_hash TEXT,
-                    is_admin   INTEGER NOT NULL DEFAULT 0,
-
-                    -- colunas exclusivas de Fiel
-                    data_batismo TEXT,
-
-                    -- colunas exclusivas de Padre
-                    data_ordenacao TEXT,
-                    salario        REAL
-                )
+                    CREATE TABLE IF NOT EXISTS usuario (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        nome VARCHAR(100) NOT NULL,
+                        email VARCHAR(150) NOT NULL UNIQUE,
+                        senha_hash VARCHAR(255) NOT NULL,
+                        is_admin BOOLEAN NOT NULL DEFAULT FALSE
+                    )
             """);
 
-            // Paróquia
             stmt.execute("""
                 CREATE TABLE IF NOT EXISTS paroquia (
-                    id            INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nome_paroquia TEXT NOT NULL UNIQUE,
-                    endereco      TEXT NOT NULL,
-                    padre_id      INTEGER REFERENCES usuario(id) ON DELETE SET NULL
+                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                    nome_paroquia VARCHAR(150) NOT NULL,
+                    endereco VARCHAR(255) NOT NULL,
+                    id_padre BIGINT,
+                
+                    CONSTRAINT fk_paroquia_padre
+                        FOREIGN KEY (id_padre)
+                        REFERENCES padre(id_usuario)
+                        ON DELETE SET NULL
                 )
             """);
 
-            // Tabela de associação Paróquia <-> Fiel (N:N)
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS paroquia_fiel (
-                    paroquia_id INTEGER NOT NULL REFERENCES paroquia(id) ON DELETE CASCADE,
-                    fiel_id     INTEGER NOT NULL REFERENCES usuario(id)  ON DELETE CASCADE,
-                    PRIMARY KEY (paroquia_id, fiel_id)
+            CREATE TABLE IF NOT EXISTS padre (
+                id_usuario BIGINT PRIMARY KEY,
+                data_ordenacao DATE,
+            
+                CONSTRAINT fk_padre_usuario
+                    FOREIGN KEY (id_usuario)
+                    REFERENCES usuario(id)
+                    ON DELETE CASCADE
+            )
+            """);
+
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS fiel (
+                    id_usuario BIGINT PRIMARY KEY,
+                    data_batismo DATE,
+                    id_paroquia BIGINT,
+                
+                    CONSTRAINT fk_fiel_usuario
+                        FOREIGN KEY (id_usuario)
+                        REFERENCES usuario(id)
+                        ON DELETE CASCADE,
+                
+                    CONSTRAINT fk_fiel_paroquia
+                        FOREIGN KEY (id_paroquia)
+                        REFERENCES paroquia(id)
+                        ON DELETE SET NULL
                 )
             """);
 
-            // Doacao (relacionado ao fiel)
             stmt.execute("""
                 CREATE TABLE IF NOT EXISTS doacao (
-                    id                       INTEGER PRIMARY KEY AUTOINCREMENT,
-                    fiel_id                  INTEGER NOT NULL REFERENCES usuario(id) ON DELETE CASCADE,
-                    valor                    REAL    NOT NULL,
-                    tipo                     TEXT,
-                    nome_paroquia            TEXT,
+                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                    valor DOUBLE NOT NULL,
+                    tipo VARCHAR(100) NOT NULL,
+                    id_fiel BIGINT NOT NULL,
+                    id_paroquia BIGINT NOT NULL,
+                
+                    CONSTRAINT fk_doacao_fiel
+                        FOREIGN KEY (id_fiel)
+                        REFERENCES fiel(id_usuario)
+                        ON DELETE CASCADE,
+                
+                    CONSTRAINT fk_doacao_paroquia
+                        FOREIGN KEY (id_paroquia)
+                        REFERENCES paroquia(id)
+                        ON DELETE CASCADE
                 )
             """);
         }
