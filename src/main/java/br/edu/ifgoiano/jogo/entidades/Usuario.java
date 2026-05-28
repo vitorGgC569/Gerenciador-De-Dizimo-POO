@@ -12,6 +12,7 @@ public abstract class Usuario {
     protected String email;
     protected String senhaHash;
     private boolean isAdmin;
+    private String telefone;
 
 
     public Long getId() {
@@ -44,6 +45,14 @@ public abstract class Usuario {
 
     public void setSenhaHash(String senhaHash) {
         this.senhaHash = senhaHash;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public boolean isAdmin() {

@@ -82,16 +82,14 @@ public class ConexaoDB {
                 )
             """);
 
-            // Dízimo (relacionado ao fiel)
+            // Doacao (relacionado ao fiel)
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS dizimo (
+                CREATE TABLE IF NOT EXISTS doacao (
                     id                       INTEGER PRIMARY KEY AUTOINCREMENT,
                     fiel_id                  INTEGER NOT NULL REFERENCES usuario(id) ON DELETE CASCADE,
-                    descricao                TEXT,
                     valor                    REAL    NOT NULL,
-                    data_inicial             TEXT,
-                    data_proxima_contribuicao TEXT,
-                    contribuinte_recorrente  INTEGER NOT NULL DEFAULT 0
+                    tipo                     TEXT,
+                    nome_paroquia            TEXT,
                 )
             """);
         }
