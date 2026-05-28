@@ -1,6 +1,10 @@
+import br.edu.ifgoiano.jogo.UI.MenuInicial;
+
 void main() {
 
-    while (true) {
+    MenuInicial menuInicial = new MenuInicial();
 
+    while (true) {
+        menuInicial.UiMenuInicial();
     }
 }
