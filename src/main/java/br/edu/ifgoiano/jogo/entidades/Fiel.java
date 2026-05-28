@@ -1,3 +1,7 @@
+package br.edu.ifgoiano.jogo.entidades;
+
+import java.util.Date;
+
 public class Fiel extends Usuario{
     private Date dataBatismo;
     private boolean isAdmin;

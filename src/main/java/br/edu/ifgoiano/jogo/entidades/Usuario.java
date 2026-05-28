@@ -1,4 +1,4 @@
-package main.java.br.edu.ifgoiano.jogo.entidades;
+package br.edu.ifgoiano.jogo.entidades;
 
 /**
  * Entidade que armazena a entidade central Usuario.
