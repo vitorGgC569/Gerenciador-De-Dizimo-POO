@@ -11,6 +11,7 @@ public abstract class Usuario {
     protected String nome;
     protected String email;
     protected String senhaHash;
+    private boolean isAdmin;
 
 
     public Long getId() {
@@ -43,5 +44,13 @@ public abstract class Usuario {
 
     public void setSenhaHash(String senhaHash) {
         this.senhaHash = senhaHash;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

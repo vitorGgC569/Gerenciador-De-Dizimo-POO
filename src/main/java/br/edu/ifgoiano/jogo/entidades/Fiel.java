@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Fiel extends Usuario{
     private Date dataBatismo;
-    private boolean isAdmin;
 
     public Date getDataBatismo() {
         return dataBatismo;
@@ -14,11 +13,4 @@ public class Fiel extends Usuario{
         this.dataBatismo = dataBatismo;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
 }
