@@ -150,4 +150,6 @@ public class Doacao {
     public void setIdParoquia(Long idParoquia) {
         this.idParoquia = idParoquia;
     }
+
+
 }
