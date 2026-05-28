@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Classe centralizada para as ofertas dos fieis
  */
-public class Dizimo{
+public class Doacao{
 
     // Variaveis de Instância.
 
