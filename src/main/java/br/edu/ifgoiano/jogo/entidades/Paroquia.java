@@ -7,8 +7,9 @@ public class Paroquia {
     private String endereco;
     private ArrayList<Fiel> fies;
     private int qtdeFieis;
+    private Padre padre;
 
-    public Paroquia(String nomeParoquia, String endereco){
+    public Paroquia(String nomeParoquia, String endereco, Padre padre){
         this.fies = new ArrayList<>();
         this.qtdeFieis = fies.size();
     }

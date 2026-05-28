@@ -3,7 +3,6 @@ package br.edu.ifgoiano.jogo.entidades;
 import java.util.Date;
 
 public class Padre extends Usuario{
-    private Double salario;
     private Date data_Ordenacao;
 
     public Double getSalario() {

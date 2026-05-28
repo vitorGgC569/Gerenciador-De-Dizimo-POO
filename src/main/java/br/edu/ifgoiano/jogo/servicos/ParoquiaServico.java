@@ -1,5 +1,4 @@
 package br.edu.ifgoiano.jogo.servicos;
 
-public class PadreServico {
-
+public class ParoquiaServico {
 }
