@@ -41,7 +41,6 @@ public class Paroquia {
         this.nomeParoquia = nomeParoquia;
         this.endereco = endereco;
         this.fies = fies;
-        this.qtdeFieis = qtdeFieis;
         this.padre = padre;
     }
 
