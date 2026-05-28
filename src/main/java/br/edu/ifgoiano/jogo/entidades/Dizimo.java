@@ -27,14 +27,6 @@ public class Dizimo{
         this.valor = valor;
     }
 
-    public Date getData() {
-        return data;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
     public Date getDataInicial() {
         return dataInicial;
     }
