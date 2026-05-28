@@ -9,42 +9,40 @@ public class Doacao{
 
     // Variaveis de Instância.
 
-    private String descricaoDizimo;
-    private Double valor;
-    private Date dataProximaContribuicao;
-    private Date dataAtual;
-    private Date dataInicial;
-    private boolean contribuinteRecorrente;
+   private double valor;
+   private String tipo;
+   private String nomeParoquia;
+   private long IdFiel;
 
-    public String getDescricaoDizimo() {
-        return descricaoDizimo;
-    }
-
-    public void setDescricaoDizimo(String descricaoDizimo) {
-        this.descricaoDizimo = descricaoDizimo;
-    }
-
-    public Double getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(double valor) {
         this.valor = valor;
     }
 
-    public Date getDataInicial() {
-        return dataInicial;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setDataInicial(Date dataInicial) {
-        this.dataInicial = dataInicial;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public boolean isContribuinteRecorrente() {
-        return contribuinteRecorrente;
+    public String getNomeParoquia() {
+        return nomeParoquia;
     }
 
-    public void setContribuinteRecorrente(boolean contribuinteRecorrente) {
-        this.contribuinteRecorrente = contribuinteRecorrente;
+    public void setNomeParoquia(String nomeParoquia) {
+        this.nomeParoquia = nomeParoquia;
+    }
+
+    public long getIdFiel() {
+        return IdFiel;
+    }
+
+    public void setIdFiel(long idFiel) {
+        IdFiel = idFiel;
     }
 }
